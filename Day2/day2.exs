@@ -9,8 +9,7 @@ defmodule Day2 do
       end)
 
     p1 = :timer.tc(fn -> solve_part_1(id_ranges) end)
-    # p2 = :timer.tc(fn -> solve_part_2(id_ranges) end)
-    p2 = {0, 0}
+    p2 = :timer.tc(fn -> solve_part_2(id_ranges) end)
 
     {p1, p2}
   end
@@ -47,13 +46,16 @@ defmodule Day2 do
     invalid_id_sum + solve_part_1(rest)
   end
 
-  defp solve_part_2([]), do: 0
+  defp solve_part_2(id_ranges), do: Enum.map(id_ranges, &sum_invalid_ids/1) |> Enum.sum()
 
-  defp solve_part_2([{first_id, last_id} | rest]) do
+  defp sum_invalid_ids({first_id, last_id}) do
     last_id = String.to_integer(last_id)
+    first_id = String.to_integer(first_id)
 
-    # I will attempt to adapt my part 1 solution, s.t. it constructs streams for 1..len/2 size repeaters
-    # This is currently breaking my brain slightly, so will come back to it tomorrow
+    # filter out any numbers in range that aren't a repeated group of numbers, then sum
+    first_id..last_id
+    |> Stream.filter(fn num -> Regex.match?(~r/^(\d+)\1+$/, Integer.to_string(num)) end)
+    |> Enum.sum()
   end
 end
 
