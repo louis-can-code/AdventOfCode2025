@@ -29,7 +29,6 @@ defmodule Day3 do
       bank
       |> String.graphemes()
       |> Enum.reduce(List.duplicate(-1, 12), &rearrange_active_batteries/2)
-      |> Enum.reverse()
       |> Enum.join()
       |> String.to_integer()
     end)
